@@ -1,3 +1,6 @@
+package com.towerdefense.controller;
+import com.towerdefense.model.Maps;
+import com.towerdefense.model.map1;
 import javafx.application.*;
 import javafx.stage.*;
 import javafx.util.Duration;
@@ -12,6 +15,8 @@ import javafx.event.*;
 import javafx.geometry.*;
 import javafx.animation.*;
 import java.util.*;
+import com.towerdefense.controller.EnemyCreator;
+import com.towerdefense.model.Enemy;
 
 public class LevelOne extends Application{
 	@Override
@@ -87,8 +92,19 @@ public class LevelOne extends Application{
 			dragImage.setY(y);
 		});
 		
-		
-		
+		EnemyCreator enemyCreator = new EnemyCreator(map1);
+        for (Enemy enemy : enemyCreator.getActiveEnemies()) {
+            mapPane.getChildren().add(enemy.getImageView()); 
+            mapPane.getChildren().add(enemy.getHealthBar()); // Add health bar
+        }
+AnimationTimer gameLoop = new AnimationTimer() {
+    @Override
+    public void handle(long now) {
+        enemyCreator.update(1.0 / 60.0);
+    }
+};
+     gameLoop.start();
+    System.out.println("Game started!");
 		
 		mainPane.setRight(vbox);
 		mapPane.setAlignment(Pos.CENTER);
@@ -98,8 +114,6 @@ public class LevelOne extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("LEVEL 1");
 		primaryStage.show();
-		
-		
 	}
 	
 	public static void main(String[] args)
